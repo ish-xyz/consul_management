@@ -1,0 +1,7 @@
+---
+- name: Restart Consuld
+  systemd:
+    name: consuld
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

@@ -1,0 +1,7 @@
+---
+
+- name: "Consul | Installation step"
+  include: installation.yml
+
+- name: "Consul | Installation step"
+  include: configuration.yml

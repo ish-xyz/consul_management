@@ -1,0 +1,14 @@
+---
+consul_version: '0.9.3'
+hashicorp_url: "https://releases.hashicorp.com/consul" 
+consul_repo_url: "{{hashicorp_url}}/{{consul_version}}/consul_{{consul_version}}_linux_amd64.zip"
+consul_install_path: '/opt/consul/'
+consul_bin: '/usr/bin/consul'
+consul_conf_path: '/etc/consul.d'
+consul_data_path: '/var/consul'
+consul_user: 'consul'
+consul_keygen: 'Do9Bg6nc43WzuD3x4LXRfg=='
+consul_dc: 'ynap-onprem-prd'
+consul_group: 'consul'
+server_nodes: ['server1', 'server2', 'server3']
+client_nodes: ['client1']

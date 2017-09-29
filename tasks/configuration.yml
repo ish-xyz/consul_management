@@ -1,0 +1,96 @@
+---
+- name: "Consul | create bootstrap configuration"
+  template:
+    src: templates/bootstrap.json.j2
+    dest: "{{ consul_conf_path }}/bootstrap/bootstrap.json"
+    mode: 0644
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+  when: ansible_fqdn == server_nodes.0
+
+- name: "Consul | create server configuration"
+  template:
+    src: templates/server.json.j2
+    dest: "{{ consul_conf_path }}/server/server.json"
+    mode: 0644
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+
+- name: "Consul | create client configuration"
+  template:
+    src: templates/client.json.j2
+    dest: "{{ consul_conf_path }}/client/client.json"
+    mode: 0644
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+
+- name: "Consul | check if the cluster is already initialized"
+  shell: consul members
+  changed_when: false
+  ignore_errors: true
+  register: cluster_status
+
+- name: "Consul | Update service if cluster already initialized"
+  template:
+    src: "templates/system_consuld_server.j2"
+    dest: "/etc/systemd/system/consuld.service"
+    mode: 0644
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+  notify:
+    - Restart Consuld
+  when: (ansible_fqdn in server_nodes) and (cluster_status.rc == 0 )
+
+- name: "Consul | Create service for bootstrap"
+  template:
+    src: "templates/system_consuld_bootstrap.j2"
+    dest: "/etc/systemd/system/consuld.service"
+    mode: 0644
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+  notify:
+    - Restart Consuld
+  when: (ansible_fqdn in server_nodes) and (cluster_status.rc != 0 ) and (ansible_fqdn == server_nodes.0) 
+
+- name: "Consul | Create service for servers"
+  template:
+    src: "templates/system_consuld_server.j2"
+    dest: "/etc/systemd/system/consuld.service"
+    mode: 0644
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+  notify:
+    - Restart Consuld
+  when: (ansible_fqdn in server_nodes) and (cluster_status.rc != 0 ) and (ansible_fqdn != server_nodes.0) 
+
+- name: "Consul | Create service for clients"
+  template:
+    src: "templates/system_consuld_client.j2"
+    dest: "/etc/systemd/system/consuld.service"
+    mode: 0644
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+  notify:
+    - Restart Consuld
+  when: (ansible_fqdn in client_nodes) and (cluster_status.rc == 0 )
+
+- block:
+      
+    - name: "Consul | Create service for servers"
+      template:
+        src: "templates/system_consuld_server.j2"
+        dest: "/etc/systemd/system/consuld.service"
+        mode: 0644
+        owner: "{{ consul_user }}"
+        group: "{{ consul_group }}"
+      notify:
+        - Restart Consuld
+
+    - name: Restart Consuld
+      systemd:
+        name: consuld
+        state: restarted
+        enabled: yes
+        daemon_reload: yes
+
+  when: ansible_fqdn == server_nodes.0

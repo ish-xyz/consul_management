@@ -1,0 +1,65 @@
+---
+
+# Check NTPD to add
+# Check communications between nodes
+# - name: Check Supported OS
+#   fail:
+#     msg: 'Error your OS is not supported'
+#   when: 'ciao' == 'ciaone'
+
+- name: "Consul | Install required packages"
+  yum:
+    name: unzip
+    state: latest
+
+- name: "Consul | Add service group => {{ consul_group }}"
+  group:
+    name: "{{ consul_group }}"
+    state: present
+
+- name: "Consul | Add service user =>  {{consul_user}} "
+  user:
+    name: "{{ consul_user}}"
+    shell: /bin/false
+    groups: "{{ consul_group }}"
+
+- name: "Consul | Create directories tree"
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+    mode: 0755
+  with_items:
+    - "{{ consul_conf_path }}"
+    - "{{ consul_conf_path }}/client"
+    - "{{ consul_conf_path }}/server"
+    - "{{ consul_conf_path }}/bootstrap"
+    - "{{ consul_data_path }}"
+
+- name: "Consul | Check consul bin directory"
+  file:
+    path: "{{ consul_install_path }}/{{ consul_version}}"
+    state: directory
+  register: consul_version_exist
+
+- name: "Consul | Unarchive Consul"
+  unarchive:
+    remote_src: true
+    src: "{{ consul_repo_url }}"
+    dest: "{{ consul_install_path }}/{{ consul_version}}"
+    creates: "{{ consul_install_path }}/{{ consul_version}}/consul"
+    mode: 0555
+  when: consul_version_exist.changed
+  register: consul_unarchive
+
+- name: "Consul | Link the current consul version"
+  file:
+    src: "{{ consul_install_path }}/{{ consul_version}}/consul"
+    dest: "{{ consul_bin }}"
+    state: link
+
+- name: "Consul | Remove non-necessary zip file"
+  file:
+    path: "{{ consul_install_path }}/{{ consul_version}}/consul_{{consul_version}}_linux_amd64.zip"
+    state: absent
