@@ -1,4 +1,4 @@
-Consul Cluster Manager
+Ansible Consul Cluster Management 
 =========
 
 This Ansible role handle the first configuration and the scaling of a Consul Cluster (both client & server side).
