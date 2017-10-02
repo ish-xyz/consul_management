@@ -44,7 +44,8 @@ Example:
 
 =================================================================================
 
-© 2017 - Present, Isham Araia. Consul Cluster Manager is released under an MIT-style license; see LICENSE for details.
+© 2017 - Present, Isham Araia.
+Consul Cluster Manager is released under an MIT-style license; see LICENSE for details.
 
 BSD
 
