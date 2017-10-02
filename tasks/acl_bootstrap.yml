@@ -1,0 +1,10 @@
+- name: Import ACL Bootstrap
+  template:
+    src: templates/acl.json.j2
+    dest: "{{ consul_conf_path }}/server/acl.json"
+    mode: 0644
+    owner: "{{ consul_user }}"
+    group: "{{ consul_group }}"
+  when: ansible_fqdn in server_nodes
+  notify:
+    - Restart Consuld

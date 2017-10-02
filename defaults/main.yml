@@ -9,6 +9,8 @@ consul_data_path: '/var/consul'
 consul_user: 'consul'
 consul_keygen: 'Do9Bg6nc43WzuD3x4LXRfg=='
 consul_dc: 'ynap-onprem-prd'
+#Linux uuidgen command
+consul_acl_token: '2baa9e45-f5d2-487d-8d19-cec16cff7f3a'
 consul_group: 'consul'
 server_nodes: ['server1', 'server2', 'server3']
 client_nodes: ['client1']
