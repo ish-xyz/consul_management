@@ -41,7 +41,7 @@ Example:
       roles:
          - { role: consul_management }
 
-====================================================================================
+=================================================================================
 
 © 2017 - Present, Isham Araia. Consul Cluster Manager is released under an MIT-style license; see LICENSE for details.
 
