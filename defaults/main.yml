@@ -7,10 +7,12 @@ consul_bin: '/usr/bin/consul'
 consul_conf_path: '/etc/consul.d'
 consul_data_path: '/var/consul'
 consul_user: 'consul'
+#Base64, use the command 'consul keygen'
 consul_keygen: 'So9vg6nc43WzuD3x4LXRfg=='
 consul_dc: 'datacenter_name'
 #Linux uuidgen command
-consul_acl_token: '2baA9e45-f5d2-487D-8q19-1ec16cff7f3a'
+consul_acl_token: 'use_the_uuidgen_command'
+consul_acl_master_token: 'use_the_uuidgen_command'
 consul_group: 'consul'
 server_nodes: ['server1', 'server2', 'server3']
 client_nodes: ['client1']

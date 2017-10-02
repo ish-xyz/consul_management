@@ -48,7 +48,6 @@ Example:
 
 Consul Cluster Manager is released under an MIT-style license; see LICENSE for details.
 
-BSD
 
 Author Information
 ------------------
