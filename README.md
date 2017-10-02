@@ -9,12 +9,12 @@ Requirements
 ------------
 
 The supported OS are:
-	Centos 7
-	RHEL 7
+- Centos 7
+- RHEL 7
 
 Required:
-	NTPD configured
-	Firewall configuration according with the consul documentations => http://consul.io/docs/install/index.html
+- NTPD configured
+- Firewall configuration according with the consul documentations => http://consul.io/docs/install/index.html
 
 
 
@@ -22,6 +22,7 @@ Role Variables/Features
 --------------
 
 Use the settings in the default directory or override trough the variables in the invocating playbook.
+
 This plabook can be used to create and scale a consul cluster.
 
 
